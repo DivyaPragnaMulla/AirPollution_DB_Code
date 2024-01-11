@@ -1,0 +1,286 @@
+<!--Impact Assessment Provincie Pugliesi-->
+<md-content ng-controller="Controller" ng-init=loadData() layout-xs="column" layout="column">
+  <h1>Impact Evaluation Province Pugliesi (cause di morte naturali) Anno {{selectedYear}} Inquinante PM2.5</h1>
+  <p>Per il calcolo si è ipotizzata una esposizione del 100% di tutta la popolazione all'inquinamento. Si è utilizzato il metodo di calcolo del rischio relativo log-linear</p>
+  <md-card style="margin: 10px; padding:10px">
+    <div layout="row">
+      <div flex="10" layout layout-align="center center">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline" >{{selectedYear}}</span>
+          </md-card-title-text>
+        </md-card-title>
+      </div>
+      <md-slider style="padding-top:7px" flex class="md-primary" md-discrete ng-model="selectedYear" 
+        ng-change="setYear(selectedYear)" 
+        step="1" min="2009" max="2018" aria-label="md-primary">
+      </md-slider>
+    </div>
+  </md-card>
+  
+  <div  flex-lg layout="column">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <md-card style="margin: 10px; padding:10px">
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline" >Tabella Riepilogativa dei risultati</span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-card-content layout="column" layout-align="space-between">
+
+        <table ng-table ="usersTable" class="table table-striped"  >
+          <tr ng-repeat="data in dati_airq">
+            <td data-title="'Provincia'">{{data.FKprovincia}}</td>
+            <td data-title="'Anno'">{{selectedYear}}</td>
+            <td data-title="'Fascia Età'">25 120</td>
+            <td data-title="'Media Inquinante'">{{data.media}}</td>
+            <td data-title="'Popolazione Esposta'">{{data.popolazione}}</td>
+            <td data-title="'Morti Cause naturali'">{{data.mortinaturali}}</td>
+            <td data-title="'Incidenza'">{{data.incidenza}}</td>
+            <td data-title="'Rischio Relativo'">{{data.rr_mean}}</td>
+            <td data-title="'Attributable Proportion'">{{data.AP_mean * 100| number :2}}%</td>
+            <td data-title="'Attributable Cases x100000'">{{data.BE_mean}}</td>
+            <td data-title="'Attributable Cases'">{{data.NE_mean}}</td>
+          </tr>
+        </table>
+
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div class="gauges">
+    <div flex-lg layout="row">
+      <md-button class="btn1" id="Mean" ng-click="aggiornaGauges($event)">Mean</md-button>
+      <md-button class="btn1" id="Lower" ng-click="aggiornaGauges($event)">Lower</md-button>
+      <md-button class="btn1" id="Upper" ng-click="aggiornaGauges($event)">Upper</md-button>
+      <h3 style="font-weight: bold;">Estimated Attributable Proportion ({{selectedAP}}) Province Pugliesi</h3>
+    </div>
+    
+    <div class="gauge" flex-lg layout="row">
+      <div data-ng-repeat="data in value track by $index" class="gauge" flex-lg layout="column">
+        
+        <md-card ng-if="loadedMortality">
+          <md-card-title>
+            <h2>{{data.provincia}}</h2>
+          </md-card-title>
+          <!--gauge-->
+          <ng-gauge ng-if="selectedAP=='Mean'"
+            size="200" 
+            type="full" 
+            thick="25" 
+            min="0" 
+            max="100" 
+            value="data.valoremean"
+            cap="round" 
+            label="AP (mean)"  
+            foreground-color="#4750B2" 
+            background-color="#8DAFB5"
+            append="%">
+          </ng-gauge>
+
+          <ng-gauge ng-if="selectedAP=='Upper'"
+            size="200" 
+            type="full" 
+            thick="25" 
+            min="0" 
+            max="100" 
+            value="data.valoreup"
+            cap="round" 
+            label="AP (upper)"  
+            foreground-color="#4750B2" 
+            background-color="#8DAFB5"
+            append="%">
+          </ng-gauge>
+
+          <ng-gauge ng-if="selectedAP=='Lower'"
+            size="200" 
+            type="full" 
+            thick="25" 
+            min="0" 
+            max="100" 
+            value="data.valorelow"
+            cap="round" 
+            label="AP (lower)"  
+            foreground-color="#4750B2" 
+            background-color="#8DAFB5"
+            append="%">
+          </ng-gauge>
+
+        </md-card>
+      </div>
+    </div>
+  </div>
+
+  <div  flex-lg layout="column">
+    <md-card id="barchart" style="margin: 10px; padding:10px">
+      <canvas ngHide="loadedMortality" id="bar_chart" width="800" height="250"></canvas>
+    </md-card>
+  </div>
+  <div  flex-lg layout="column">
+    <md-card id="linechart" style="margin: 10px; padding:10px">
+      <canvas ngHide="loadedMortality" id="line-chart" width="800" height="250"></canvas>
+    </md-card>
+  </div>
+</md-content>
+
+<md-divider></md-divider>
+
+<!--Burden Of Disease Province Pugliesi-->
+<md-content ng-controller="ControllerBoD" ng-init=loadData() layout-xs="column" layout="column">
+  <h1>Burden of Disease (cause di morte per {{selectedoutcome}}) Province Pugliesi Anno {{selectedYear}} Inquinante PM2.5</h1>
+  <p>Per il calcolo è ipotizzata una esposizione del 100% di tutta la popolazione all'inquinamento. Si è utilizzata la IER function del 2016 GBD 2015/2016</p>
+  <md-card style="margin: 10px; padding:10px">
+    <div layout="row">
+      <div flex="10" layout layout-align="center center">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline" >{{selectedYear}}</span>
+          </md-card-title-text>
+        </md-card-title>
+      </div>
+      <md-slider style="padding-top:7px" flex class="md-primary" md-discrete ng-model="selectedYear" 
+        ng-change="setYear(selectedYear)" 
+        step="1" min="2009" max="2018" aria-label="md-primary">
+      </md-slider>
+    </div>
+  </md-card>
+
+  <div className='form-row' >
+    <md-input-container style="width: 140px;">                
+      <div style="position: 'relative'; z-index: 9999">
+        <label>Scegli Causa Morte </label>
+        <md-select ng-model="selectedoutcome"  ng-change="changeOutcome()" >
+          <md-option ng-value="outcome.sigla" ng-repeat="outcome in outcomes">{{outcome.nome}}</md-option>
+        </md-select>
+      </div>
+    </md-input-container>
+  </div>
+
+  <div  flex-lg layout="column">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <md-card style="margin: 10px; padding:10px">
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline" >Tabella Riepilogativa dei Risultati</span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-card-content layout="column" layout-align="space-between">
+
+        <table ng-table ="usersTable" class="table table-striped"  >
+          <tr ng-repeat="data in dati_airq">
+            <td data-title="'Provincia'">{{data.FKprovincia}}</td>
+            <td data-title="'Anno'">{{selectedYear}}</td>
+            <td data-title="'Fascia Età'">{{data.fascia_eta[0]}}-{{data.fascia_eta[1]}}</td>
+            <td data-title="'Media Inquinante'">{{data.media}}</td>
+            <td data-title="'Popolazione Esposta'">{{data.popolazione}}</td>
+            <td data-title="'Morti per Causa'">{{data.morticausa}}</td>
+            <td data-title="'Incidenza'">{{data.incidenza}}</td>
+            <td data-title="'Rischio Relativo'">{{data.rr_mean}}</td>
+            <td data-title="'Attributable Proportion'">{{data.AP_mean * 100| number :2}}%</td>
+            <td data-title="'Attributable Cases x100000'">{{data.BE_mean}}</td>
+            <td data-title="'Attributable Cases'">{{data.NE_mean}}</td>
+          </tr>
+        </table>
+
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div class="gauges">
+    <div flex-lg layout="row">
+      <md-button class="btn1" id="Mean" ng-click="aggiornaGauges($event)">Mean</md-button>
+      <md-button class="btn1" id="Lower" ng-click="aggiornaGauges($event)">Lower</md-button>
+      <md-button class="btn1" id="Upper" ng-click="aggiornaGauges($event)">Upper</md-button>
+      <h3 style="font-weight: bold;">Estimated Attributable Proportion ({{selectedAP}}) Province Pugliesi</h3>
+    </div>
+    
+    <div class="gauge" flex-lg layout="row">
+      <div data-ng-repeat="data in value track by $index" class="gauge" flex-lg layout="column">
+        
+        <md-card ng-if="loadedMortality">
+          <md-card-title>
+            <h2>{{data.provincia}}</h2>
+          </md-card-title>
+          <!--gauge-->
+          <ng-gauge ng-if="selectedAP=='Mean'"
+            size="200" 
+            type="full" 
+            thick="25" 
+            min="0" 
+            max="100" 
+            value="data.valoremean"
+            cap="round" 
+            label="AP (mean)"  
+            foreground-color="#4750B2" 
+            background-color="#8DAFB5"
+            append="%">
+          </ng-gauge>
+
+          <ng-gauge ng-if="selectedAP=='Upper'"
+            size="200" 
+            type="full" 
+            thick="25" 
+            min="0" 
+            max="100" 
+            value="data.valoreup"
+            cap="round" 
+            label="AP (upper)"  
+            foreground-color="#4750B2" 
+            background-color="#8DAFB5"
+            append="%">
+          </ng-gauge>
+
+          <ng-gauge ng-if="selectedAP=='Lower'"
+            size="200" 
+            type="full" 
+            thick="25" 
+            min="0" 
+            max="100" 
+            value="data.valorelow"
+            cap="round" 
+            label="AP (lower)"  
+            foreground-color="#4750B2" 
+            background-color="#8DAFB5"
+            append="%">
+          </ng-gauge>
+
+        </md-card>
+      </div>
+    </div>
+  </div>
+
+  <div  flex-lg layout="column">
+    <md-card id="bar_chart_BOD_card" style="margin: 10px; padding:10px">
+      <canvas ngHide="loadedMortality" id="bar_chart_BOD" width="800" height="250"></canvas>
+    </md-card>
+  </div>
+
+  <div flex-lg layout="column">
+    <md-card id="line_chart_BOD_card" style="margin: 10px; padding:10px">
+      <canvas ngHide="loadedMortality" id="line_chart_BOD" width="800" height="250"></canvas>
+    </md-card>
+  </div>
+</md-content>
+
+
+  <style>
+    .md-button {
+    padding: 0 6px 0 6px;
+    margin: 6px 8px 6px 8px;
+    min-width: 88px;
+    border-radius: 3px;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration:none;
+    border: none;
+    outline: none;
+  }
+  .btn1 {
+    color : rgb(49, 46, 46);
+    background-color: rgba(255, 222, 121, 0.96);
+    border-radius: 10px 0 0 10px;
+    font-size: 16px;
+  }
+  </style>
+

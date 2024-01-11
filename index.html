@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
+  <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AirQ+ Pollution Analysis</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script src="lib/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-route/angular-route.js"></script>
+ 
+  <script src="app.js"></script>
+  <script src="menu.js"></script>
+
+  <script src="view1/view1.js"></script>
+  <script src="map/map.js"></script>
+  <script src="analysis/analysis.js"></script>
+  <script src="core/version/version.js"></script>
+  <script src="core/version/version-directive.js"></script>
+  <script src="core/version/interpolate-filter.js"></script>  
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ui-leaflet/0.9.0/angular-leaflet-directive_dev_mapped.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-leaflet-directive/0.10.0/angular-leaflet-directive.min.js" integrity="sha512-dtFpnbvMRGgxjWRrfWjqeiRwDk5iQR/d7FRIv5xs+7fIWzKI/376mEiYTcyfH1os/ed+BgMpIFO+p7rof14Hdg==" crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/md-data-table/1.8.0/md-data-table-templates.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/md-data-table/1.8.0/md-data-table.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/md-data-table/1.8.0/md-data-table-style.css"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.5.0/angular-material-icons.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.js"> </script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0/ng-table.min.js" integrity="sha512-X75ONbxI/GkbDTIJLqaF//7FJXu+z/VzyXFr/3lHfROj17Jj/b4lB78h129kfrnXwK1eoz427iRMP1+zxygtjA==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0/ng-table.css" integrity="sha512-5A96+1fxF78tn3EBPhuKW4vyczxuZNNH6Bt/ig7QBaf3mvLSf0EQMV5wuMzQgXQ35NXHmm/d25EIQ90vqF6hhQ==" crossorigin="anonymous" />
+
+  <script src="https://cdn.jsdelivr.net/npm/angularjs-gauge@2.2.0/dist/angularjs-gauge.min.js"></script>
+
+</head>
+
+<body ng-app="myApp" ng-controller="AppCtrl" layout="column">
+
+	<!-- Container #1 (see wireframe) -->
+
+        
+          <md-content >
+            <md-toolbar class="md-padding" layout="row" >
+            <img src="/img/logo2.svg" style="width: 100px; height: 100px; padding-right: 20px; "
+            aria-label="Insert Drive Icon">
+            </img>
+            <div  >
+              <h2 style="margin: unset; margin-top: 3px;">AirQ+ Pollution Analysis</h2>       
+              <p style="margin: unset;" class="md-body1">Monitor pollution levels and mortality rates</p>
+              <p style="margin: unset;" class="md-subhead">Big Data Project - Longo A., Miccoli E.</p>
+            </div>
+            <md-nav-bar  style="padding-left: 100px;" 
+              md-no-ink-bar="disableInkBar"
+              md-selected-nav-item="currentNavItem"
+              nav-bar-aria-label="navigation links">
+              <md-nav-item md-selected class="md-theme-indigo" md-nav-click="goto('#!/view1')" name="view1">
+                <h3 class="md-toolbar-tools"  ><a href="#!/view1"  style="margin-bottom: 20px;color:white">Dashboard</a></h3>
+              </md-nav-item>
+              <md-nav-item md-nav-click="goto('map')" name="map" >
+                <h4 class="md-toolbar-tools" ><a style="margin-bottom: 20px; color:white" href="#!/map">Maps</a></h4>
+              </md-nav-item>
+              <md-nav-item md-nav-click="goto('analysis')" name="analysis">
+                <h4 class="md-toolbar-tools" ><a style="margin-bottom: 20px;color:white" href="#!/analysis">Analysis</a></h4>
+              </md-nav-item>
+              
+                
+</md-toolbar>
+              
+            </md-nav-bar>
+           
+            
+        
+          </md-content>
+
+	<!-- Container #2 -->
+    <div style="z-index: 9" flex layout="row">
+
+    <!-- Container #3 -->  
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+  
+		<!-- Container #4 -->
+        <md-content flex id="content" class="ext-content">
+
+          <div ng-view></div>
+
+          <div>Big Data Project A.A. 2020-2021 - Università del Salento - Authors: Longo A., Miccoli E. - v<span app-version></span></div>
+        </md-content>
+
+    </div>
+	
+  </body>
+</html>

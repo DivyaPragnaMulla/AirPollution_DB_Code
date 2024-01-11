@@ -1,0 +1,107 @@
+.red {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #bd4545;
+}
+
+.blue {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #0000FF;
+}
+.yellow {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #e8ff17;
+}
+.good {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #17ff17;
+  fill: #5aff5a;
+
+}
+.medium_good {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #aeff17;
+}
+.quiete_good {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #dcff17;
+}
+.not_good {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #fff017;
+}
+.almost_dangerous {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #ffa617;
+}
+.low_dangerous {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #ff8717;
+}
+.dangerous {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #ff7417;
+}
+.high_dangerous {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #ff5917;
+}
+.very_very_dangerous {
+  border-radius: 120px;
+  opacity: .75;
+  background-color: #ff1717;
+}
+.listdemoListControls md-divider {
+    margin-top: 0;
+    margin-bottom: 0; }
+  
+  .listdemoListControls md-list {
+    padding-top: 0; }
+  
+  .listdemoListControls md-list-item > p,
+  .listdemoListControls md-list-item > .md-list-item-inner > p,
+  .listdemoListControls md-list-item .md-list-item-inner > p,
+  .listdemoListControls md-list-item .md-list-item-inner > .md-list-item-inner > p {
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Likely future */ }
+
+    .gridListdemoBasicUsage md-grid-list {
+        margin: 8px; }
+      
+.selectdemoSelectHeader .demo-header-searchbox {
+            border: none;
+            outline: none;
+            height: 100%;
+            width: 100%;
+            padding: 0; }
+.selectdemoSelectHeader .demo-select-header {
+            box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12);
+            padding-left: 16px;
+            height: 48px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            width: auto; }
+          .selectdemoSelectHeader md-content._md {
+            max-height: 240px; }
+          .selectdemoSelectHeader md-input-container {
+            min-width: 112px; }
+.ng-table-pager {
+    display: none;
+}

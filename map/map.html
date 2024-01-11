@@ -1,0 +1,175 @@
+<div >
+
+  <md-content style="padding:5px">
+      <md-card style="margin: 10px; padding:10px">
+
+
+        <div layout="row" ng-controller="yearController" >
+          <div flex="10" layout layout-align="center center">
+            <md-card-title>
+              <md-card-title-text>
+
+                <span class="md-headline" >{{selectedYear}}</span>
+              </md-card-title-text>
+            </md-card-title>
+          </div>
+              <md-slider style="padding-top:7px" flex class="md-primary" md-discrete ng-model="selectedYear" 
+              ng-change="setYear(selectedYear)" 
+              
+              step="1" min="2010" max="2018" aria-label="md-primary">
+             
+              </md-slider>
+        </div>
+      </md-card>
+      
+      <md-content  layout-xs="column" layout="row">
+        <div flex-lg flex-gt-lg="50" layout="column">
+         
+          <md-card width="100%" height="480px" ng-controller="GeoJSONController" ng-init="loadData()" >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Pollution  
+                </span>
+
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+               
+                <leaflet style="position: 'relative'; z-index: 1" center="italy" ng-if="loaded" width="100%" height="480px" defaults="defaults" markers="markers" layers="layers" geojson="geojson" id="map-geojson" ></leaflet>
+                <div width="100%" height="480px" layout="row" ng-if="!loaded" ayout-sm="column" layout-align="space-around">
+                  <md-progress-circular width="100%" height="480px" md-mode="indeterminate"></md-progress-circular>
+                </div>
+                
+            </md-card-content>
+            
+            <md-card-actions layout="row" >
+       
+              
+                <div className='form-row' >
+                  <md-input-container 
+                  style="width: 140px;">                
+                    <div style="position: 'relative'; z-index: 9999">
+
+                    
+                    <label>Choose Polluntant </label>
+                    <md-select ng-model="selectedPolluntants"  ng-change="changePolluntants(event)" >
+                      <md-option ng-value="polluntant" ng-repeat="polluntant in polluntants">{{polluntant.name}}</md-option>
+  
+                    </md-select>
+                  </div>
+                </md-input-container>
+
+                </div>
+                <div style="margin-left: 5px; padding:45px; color:#ff1717; font-size: small;" layout-align="center">
+                  {{selectedPolluntants.name}}, Dangerous value: {{selectedPolluntants.valoreLimite}}            
+                </div>
+             
+              </md-card-actions>
+              
+            
+          </md-card>
+        </div>
+        <div flex-lg flex-gt-lg="50" layout="column">
+          <md-card width="100%" height="480px" ng-controller="mortalityController" ng-init="loadData()">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Mortality Map</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <leaflet ng-if="loadedMortality" center="italy" width="100%" height="480px" defaults="defaults" layers="layers" geojson="geojson" id="map-geojson" ></leaflet>
+              <div width="100%" height="480px" layout="row" ng-if="!loadedMortality" ayout-sm="column" layout-align="space-around">
+                <md-progress-circular width="100%" height="480px" md-mode="indeterminate"></md-progress-circular>
+              </div>
+            
+            </md-card-content>
+            <md-card-actions layout="row">
+              <div className='form-row' >
+                <md-input-container 
+                style="width: 370px;">                
+                  <div style="position: 'relative'; z-index: 9999">                 
+                  <label>Choose Disease</label>
+                  <md-select ng-model="selectedCause"  ng-change="changeCause(event)" >
+                    <md-option ng-value="cause" ng-repeat="cause in causes">{{cause.FKairqplus}} ({{cause.descrizione}})</md-option>
+
+                  </md-select>
+                </div>
+              </md-input-container>
+
+              </div>
+
+            </md-card-actions>
+          </md-card>
+         
+         
+        </div>
+      </md-content>
+     
+      <div ng-hide="true" layout="row" layout-wrap  >
+              
+        <md-subheader class="md-no-sticky">Centraline</md-subheader>
+        <md-list ng-cloak>
+
+        <md-list-item ng-repeat="rilevazione in rilevazioni">
+          <md-checkbox ng-model="rilevazione.selected"></md-checkbox>
+          <p>{{rilevazione.nomeCentralina}}  -  {{rilevazione.sigla}}:{{rilevazione.valore_medio}}</p>
+          <!md-icon class="md-secondary" ng-click="doSecondaryAction($event)" aria-label="Chat" md-svg-icon="communication:message">
+        <!/md-icon>
+        </md-list-item>
+        </md-list>
+      </div>
+
+    
+  </md-content>
+  <style>
+    .carddemoBasicUsage .card-media {
+          background-color: #999999; 
+      }
+    .good {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #28aa28c2;
+
+    }
+    .medium_good {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #8bd600ea;
+    }
+    .quiete_good {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #9fd40c;
+    }
+    .not_good {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #fff017;
+    }
+    .almost_dangerous {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #ffa617;
+    }
+    .low_dangerous {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #ff8717;
+    }
+    .dangerous {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #ff7417;
+    }
+    .high_dangerous {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #ff5917;
+    }
+    .very_very_dangerous {
+      border-radius: 120px;
+      opacity: 1;
+      background-color: #ff1717;
+    }
+</style>
+</div>  

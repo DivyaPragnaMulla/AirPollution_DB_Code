@@ -1,0 +1,266 @@
+  
+<md-content style="padding:5px" ng-controller="Controller2" ng-init="loadData()" >
+  <md-content  class="md-padding" layout-xs="column" layout="row" className='form-row' >
+    
+    
+  </md-content>
+ 
+  <md-content  layout-xs="column" layout="row">
+    <div layout="column" >
+      <md-input-container 
+      style="width: 190px; margin-left: 30px; ">                
+    
+          <h1 class="md-title">Polluntant</h1>
+        <md-select  placeholder={{selectedPolluntants.valoreLimite}} ng-model="selectedPolluntants"  ng-change="changePolluntants()" >
+          <md-option ng-value="polluntant" ng-repeat="polluntant in polluntants">{{polluntant.name}}</md-option>
+  
+        </md-select>
+      
+      </md-input-container>
+      </div>
+      <div  layout="column" >
+        
+        <md-input-container  
+        style="width: 190px;margin-left: 40px;">                
+         
+        <h1 class="md-title">Provincia</h1>
+          <md-select ng-model="selectedProvincia"  ng-change="changeProvincia()" >
+            <md-option ng-value="provincia" ng-repeat="provincia in province">{{provincia.name}}</md-option>
+    
+           </md-select>
+        
+       
+       
+        </md-input-container>
+      </div>
+    <div flex-lg flex-gt-lg="50" layout="column">
+        <md-card style="margin: 10px; padding:10px;" ng-style="{backgroundColor: 
+          actual_pollution.valore_min> actual_pollution.valoreLimite*1.33 ? 'red' : 
+          dati_provincia.valore_min>= (actual_pollution.valoreLimite) ? '#ff8717' :
+          actual_pollution.valore_min>= (actual_pollution.valoreLimite/1.8) ? '#fff017' :
+          '#4fc04f'}" >
+            <md-card-title>
+              <md-card-title-text>
+
+                <span class="md-title" > Actual min value {{selectedPolluntants.name}}: {{(actual_pollution.valore_min+actual_pollution.valore_medio)/2 | number}}  </span>
+              </md-card-title-text>
+            </md-card-title>
+        </md-card>
+        
+    </div>
+    <div flex-lg flex-gt-lg="50" layout="column">
+        <md-card style="margin: 10px; padding:10px"  ng-style="{backgroundColor: 
+          actual_pollution.valore_max> actual_pollution.valoreLimite*1.33 ? 'red' : 
+          actual_pollution.valore_max>= (actual_pollution.valoreLimite) ? '#ff8717' :
+          actual_pollution.valore_max>= (actual_pollution.valoreLimite/1.8) ? '#fff017' :
+          '#4fc04f'}">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-title" > Actual max value {{selectedPolluntants.name}}: {{actual_pollution.valore_max | number}}  </span>
+            </md-card-title-text>
+          </md-card-title>
+        </md-card>
+    </div>
+    <div flex-lg flex-gt-lg="50" layout="column">
+      <md-card style="margin: 10px; padding:10px"  ng-style="{backgroundColor: 
+        actual_pollution.valore_pond_max_min> actual_pollution.valoreLimite*1.33 ? 'red' : 
+        actual_pollution.valore_pond_max_min>= (actual_pollution.valoreLimite) ? '#ff8717' :
+        actual_pollution.valore_pond_max_min>= (actual_pollution.valoreLimite/1.8) ? '#fff017' :
+        '#4fc04f'}">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-title" > Actual mean value {{selectedPolluntants.name }}  : {{actual_pollution.valore_pond_max_min | number}}  </span>          
+          </md-card-title-text>
+        </md-card-title>
+      </md-card>
+  </div>
+  <div flex-lg flex-gt-lg="50" layout="column"  >
+    <md-card style="margin: 10px; padding:10px; fill-opacity: 0.5;" ng-style="{backgroundColor: 
+      actual_mortality.tasso_mortalita > 9 ? 'red' : 
+      actual_mortality.tasso_mortalita >= 8 ? '#ff8717' :
+      actual_mortality.tasso_mortalita >= 7 ? '#fff017' :
+      '#4fc04f'}">
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-title" > Mortality Rate : </span>
+          <span class="md-title" >{{actual_mortality.tasso_mortalita}}
+          
+        </md-card-title-text>
+      </md-card-title>
+    </md-card>
+</div>
+  </md-content>
+
+  <md-grid-list 
+  md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+  md-row-height-gt-md="1:1" 
+    md-gutter="5px" md-gutter-gt-sm="8px"
+    >
+      <md-grid-tile  md-colspan="3" md-rowspan="2"  >
+        
+        <div flex-lg flex-gt-lg="50" >
+          
+          <md-card class="md-theme-indigo" ng-controller=Controller2 >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Pollution in {{selectedProvincia.name}} Bar Chart
+                </span>
+  
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <div style="position: relative;display: -webkit-inline-box;  width:100%;" >
+                <canvas id="bar_chart1"></canvas>
+              </div>
+        
+            </md-card-content>
+            
+            <md-card-actions layout="row" >  
+              </md-card-actions>      
+          </md-card>
+        </div>
+      </md-grid-tile>
+      <md-grid-tile  md-colspan="3" md-rowspan="2"  >
+        
+        <div flex-lg flex-gt-lg="50" >
+          
+          <md-card class="md-theme-indigo" ng-controller=Controller2 >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Mortality in {{selectedProvincia.name}} Bar Chart
+                </span>
+  
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <div style="position: relative;display: -webkit-inline-box;  width:100%;" >
+                <canvas id="bar_chart2"></canvas>
+              </div>
+        
+            </md-card-content>
+            
+            <md-card-actions layout="row" >
+      
+                <!div style="margin-right: 5px;" >
+                  <!md-button class="md-raised md-warn">
+                    
+                    <!/md-button>
+                <!/div>
+  
+              </md-card-actions>
+              
+          </md-card>
+        </div>
+      </md-grid-tile>
+      <md-grid-tile md-colspan="3" md-rowspan="2"  >
+        <div flex-lg flex-gt-lg="50" >
+          
+          <md-card ng-controller=Controller2>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Pollution in {{selectedProvincia.name}} Line Chart
+                </span>
+  
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <div style="position: relative;display: -webkit-inline-box;  width:100%;" >
+                <canvas id="line_chart1"></canvas>
+              </div>
+        
+            </md-card-content>
+            
+            <md-card-actions layout="row" >
+      
+               
+              </md-card-actions>
+              
+            
+          </md-card>
+        </div>
+      </md-grid-tile>
+      <md-grid-tile md-colspan="3" md-rowspan="2"  >
+        <div flex-lg flex-gt-lg="50" >
+          
+          <md-card ng-controller=Controller2>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Mortality in {{selectedProvincia.name}} Line Chart
+                </span>
+  
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <div style="position: relative;display: -webkit-inline-box;  width:100%;" >
+                <canvas id="line_chart2"></canvas>
+              </div>
+        
+            </md-card-content>
+            
+            <md-card-actions layout="row" >
+              </md-card-actions>
+              
+            
+          </md-card>
+        </div>
+      </md-grid-tile>
+      <md-grid-tile md-colspan="3" md-rowspan="2"  >
+        
+        <div flex-lg flex-gt-lg="50" >
+          
+          <md-card ng-controller=Controller2 >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Radar Chart Pollution
+                </span>
+  
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <div style="position: relative;display: -webkit-inline-box;  width:100%;" >
+                <canvas id="radar_chart_pollution"></canvas>
+              </div>
+        
+            </md-card-content>
+            
+            <md-card-actions layout="row" >
+      
+  
+              </md-card-actions>
+ 
+          </md-card>
+        </div>
+      </md-grid-tile>
+      <md-grid-tile md-colspan="3" md-rowspan="2"  >
+        
+        <div flex-lg flex-gt-lg="50" >
+          
+          <md-card ng-controller=Controller2 >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Radar Chart Mortality
+                </span>
+  
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+              <div style="position: relative;display: -webkit-inline-box;  width:100%;" >
+                <canvas id="radar_chart_mortality"></canvas>
+              </div>
+        
+            </md-card-content>
+            
+            <md-card-actions layout="row" >  
+              </md-card-actions>
+              
+            
+          </md-card>
+        </div>
+      </md-grid-tile>
+    </md-content>
+  
+  </md-grid-list>
+ 
+</md-content>
+
+</md-content>
